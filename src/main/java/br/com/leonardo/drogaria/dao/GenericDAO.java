@@ -36,6 +36,40 @@ public class GenericDAO<Entidade> {
 		}
 	}
 	
+	public void excluir(Entidade entidade) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transacao = null;
+		
+		try {
+			transacao = sessao.beginTransaction();
+			sessao.delete(entidade);
+			
+			transacao.commit();
+		} catch (Exception e) {
+			if(transacao != null) transacao.rollback();
+			throw e;
+		}finally {
+			sessao.close();
+		}
+	}
+	
+	public void editar(Entidade entidade) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transacao = null;
+		
+		try {
+			transacao = sessao.beginTransaction();
+			sessao.update(entidade);
+			
+			transacao.commit();
+		} catch (Exception e) {
+			if(transacao != null) transacao.rollback();
+			throw e;
+		}finally {
+			sessao.close();
+		}
+	}
+	
 	public List<Entidade> listar(){
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		
@@ -71,5 +105,22 @@ public class GenericDAO<Entidade> {
 		}
 		
 		return resultado;
+	}
+	
+	public void merge(Entidade entidade) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transacao = null;
+		
+		try {
+			transacao = sessao.beginTransaction();
+			sessao.merge(entidade);
+			
+			transacao.commit();
+		} catch (Exception e) {
+			if(transacao != null) transacao.rollback();
+			throw e;
+		}finally {
+			sessao.close();
+		}
 	}
 }
